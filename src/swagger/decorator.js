@@ -1,6 +1,6 @@
 // @flow
-import { innerAPIObject } from "../internal/singleton";
-import { buildDefinitions } from "./definitions";
+import {innerAPIObject} from "../internal/singleton";
+import {buildDefinitions} from "./definitions";
 
 /**
  * Description 设置请求路径
@@ -9,23 +9,23 @@ import { buildDefinitions } from "./definitions";
  * @returns {Function}
  */
 export function apiRequestMapping(method: string, path: string) {
-  return function(target, key, descriptor) {
-    let apiKey = `${target.name}-${key}`;
+    return function (target, key, descriptor) {
+        let apiKey = `${target.name}-${key}`;
 
-    // 设置请求方法
-    descriptor.value.method = method;
-    // 设置请求路径
-    descriptor.value.path = path;
+        // 设置请求方法
+        descriptor.value.method = method;
+        // 设置请求路径
+        descriptor.value.path = path;
 
-    _initializeInnerAPIObject(target, key, descriptor);
+        _initializeInnerAPIObject(target, key, descriptor);
 
-    innerAPIObject[apiKey].requestMapping = {
-      method,
-      path
+        innerAPIObject[apiKey].requestMapping = {
+            method,
+            path
+        };
+
+        return descriptor;
     };
-
-    return descriptor;
-  };
 }
 
 /**
@@ -34,22 +34,20 @@ export function apiRequestMapping(method: string, path: string) {
  * @param produces
  * @returns {Function}
  */
-export function apiDescription(
-  description: string,
-  produces: [string] = ["application/json"]
-) {
-  return function(target, key, descriptor) {
-    let apiKey = `${target.name}-${key}`;
+export function apiDescription(description: string,
+                               produces: [string] = ["application/json"]) {
+    return function (target, key, descriptor) {
+        let apiKey = `${target.name}-${key}`;
 
-    _initializeInnerAPIObject(target, key, descriptor);
+        _initializeInnerAPIObject(target, key, descriptor);
 
-    innerAPIObject[apiKey].description = {
-      description,
-      produces
+        innerAPIObject[apiKey].description = {
+            description,
+            produces
+        };
+
+        return descriptor;
     };
-
-    return descriptor;
-  };
 }
 
 /**
@@ -61,35 +59,35 @@ export function apiDescription(
  * @returns {Function}
  */
 export function pathParameter({
-  name,
-  description,
-  type,
-  defaultValue
-}: {
-  name: string,
-  description: string,
-  type: string,
-  defaultValue: any
+                                  name,
+                                  description,
+                                  type,
+                                  defaultValue
+                              }: {
+    name: string,
+    description: string,
+    type: string,
+    defaultValue: any
 }) {
-  return function(target, key, descriptor) {
-    let apiKey = `${target.name}-${key}`;
+    return function (target, key, descriptor) {
+        let apiKey = `${target.name}-${key}`;
 
-    _initializeInnerAPIObject(target, key, descriptor);
+        _initializeInnerAPIObject(target, key, descriptor);
 
-    innerAPIObject[apiKey].pathParameter ||
-      (innerAPIObject[apiKey].pathParameter = []);
+        innerAPIObject[apiKey].pathParameter ||
+        (innerAPIObject[apiKey].pathParameter = []);
 
-    innerAPIObject[apiKey].pathParameter.splice(0, 0, {
-      name,
-      description,
-      type,
-      in: "path",
-      required: true,
-      default: defaultValue
-    });
+        innerAPIObject[apiKey].pathParameter.splice(0, 0, {
+            name,
+            description,
+            type,
+            in: "path",
+            required: true,
+            default: defaultValue
+        });
 
-    return descriptor;
-  };
+        return descriptor;
+    };
 }
 
 /**
@@ -103,39 +101,39 @@ export function pathParameter({
  * @returns {Function}
  */
 export function queryParameter({
-  name,
-  description,
-  required,
-  type,
-  items,
-  defaultValue
-}: {
-  name: string,
-  description: string,
-  required: boolean,
-  type: any,
-  items: any
+                                   name,
+                                   description,
+                                   required,
+                                   type,
+                                   items,
+                                   defaultValue
+                               }: {
+    name: string,
+    description: string,
+    required: boolean,
+    type: any,
+    items: any
 }) {
-  return function(target, key, descriptor) {
-    let apiKey = `${target.name}-${key}`;
+    return function (target, key, descriptor) {
+        let apiKey = `${target.name}-${key}`;
 
-    _initializeInnerAPIObject(target, key, descriptor);
+        _initializeInnerAPIObject(target, key, descriptor);
 
-    innerAPIObject[apiKey].queryParameter ||
-      (innerAPIObject[apiKey].queryParameter = []);
+        innerAPIObject[apiKey].queryParameter ||
+        (innerAPIObject[apiKey].queryParameter = []);
 
-    innerAPIObject[apiKey].queryParameter.splice(0, 0, {
-      name,
-      description,
-      required,
-      type,
-      items,
-      in: "query",
-      default: defaultValue
-    });
+        innerAPIObject[apiKey].queryParameter.splice(0, 0, {
+            name,
+            description,
+            required,
+            type,
+            items,
+            in: "query",
+            default: defaultValue
+        });
 
-    return descriptor;
-  };
+        return descriptor;
+    };
 }
 
 /**
@@ -147,37 +145,39 @@ export function queryParameter({
  * @returns {Function}
  */
 export function bodyParameter({
-  name,
-  description,
-  required,
-  schema
-}: {
-  name: string,
-  description: string,
-  required: boolean,
-  schema: any
+                                  name,
+                                  description,
+                                  required,
+                                  schema
+                              }: {
+    name: string,
+    description: string,
+    required: boolean,
+    schema: any
 }) {
-  return function(target, key, descriptor) {
-    let apiKey = `${target.name}-${key}`;
+    return function (target, key, descriptor) {
+        let apiKey = `${target.name}-${key}`;
 
-    _initializeInnerAPIObject(target, key, descriptor);
+        _initializeInnerAPIObject(target, key, descriptor);
 
-    innerAPIObject[apiKey].bodyParameter ||
-      (innerAPIObject[apiKey].bodyParameter = []);
+        descriptor.value.bodySchema = schema;
+        descriptor.value.bodyParamName = name;
+        innerAPIObject[apiKey].bodyParameter ||
+        (innerAPIObject[apiKey].bodyParameter = []);
 
-    innerAPIObject[apiKey].bodyParameter.splice(0, 0, {
-      name,
-      description,
-      required,
-      schema,
-      in: "body"
-    });
+        innerAPIObject[apiKey].bodyParameter.splice(0, 0, {
+            name,
+            description,
+            required,
+            schema,
+            in: "body"
+        });
 
-    // 根据传入的 Schema 构建定义
-    buildDefinitions(schema);
+        // 根据传入的 Schema 构建定义
+        buildDefinitions(schema);
 
-    return descriptor;
-  };
+        return descriptor;
+    };
 }
 
 /**
@@ -187,29 +187,27 @@ export function bodyParameter({
  * @param schema
  * @returns {Function}
  */
-export function apiResponse(
-  statusCode: number,
-  description: string,
-  schema: any
-) {
-  return function(target, key, descriptor) {
-    let apiKey = `${target.name}-${key}`;
+export function apiResponse(statusCode: number,
+                            description: string,
+                            schema: any) {
+    return function (target, key, descriptor) {
+        let apiKey = `${target.name}-${key}`;
 
-    _initializeInnerAPIObject(target, key, descriptor);
+        _initializeInnerAPIObject(target, key, descriptor);
 
-    innerAPIObject[apiKey].responses || (innerAPIObject[apiKey].responses = []);
+        innerAPIObject[apiKey].responses || (innerAPIObject[apiKey].responses = []);
 
-    innerAPIObject[apiKey].responses.splice(0, 0, {
-      statusCode,
-      description,
-      schema
-    });
+        innerAPIObject[apiKey].responses.splice(0, 0, {
+            statusCode,
+            description,
+            schema
+        });
 
-    // 根据传入的 Schema 构建定义
-    buildDefinitions(schema);
+        // 根据传入的 Schema 构建定义
+        buildDefinitions(schema);
 
-    return descriptor;
-  };
+        return descriptor;
+    };
 }
 
 /**
@@ -220,14 +218,14 @@ export function apiResponse(
  * @private
  */
 function _initializeInnerAPIObject(target, key, descriptor) {
-  let apiKey = `${target.name}-${key}`;
+    let apiKey = `${target.name}-${key}`;
 
-  if (!innerAPIObject[apiKey]) {
-    innerAPIObject[apiKey] = {};
-    innerAPIObject[apiKey].instance = {
-      target,
-      key,
-      descriptor
-    };
-  }
+    if (!innerAPIObject[apiKey]) {
+        innerAPIObject[apiKey] = {};
+        innerAPIObject[apiKey].instance = {
+            target,
+            key,
+            descriptor
+        };
+    }
 }

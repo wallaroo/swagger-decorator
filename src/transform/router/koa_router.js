@@ -5,7 +5,7 @@ const debug = require("debug")("koa_router");
 import { buildSwaggerJSON } from "../../swagger/paths";
 import { swaggerJSON } from "../../swagger/template/swagger.json";
 import { swaggerHTML } from "../../swagger/template/swagger.html";
-
+const bodyParser = require('koa-bodyparser');
 const methods = [
   "get",
   "post",
@@ -54,25 +54,38 @@ export function wrappingKoaRouter(
     ctx.body = swaggerJSON;
   });
 
-  /**
+  /**methods
    * Description 扫描某个类中的所有静态方法，按照其注解将其添加到
    * @param StaticClass
    */
   router.scan = function(StaticClass: Function) {
     let methods = Object.getOwnPropertyNames(StaticClass);
 
-    // 遍历该类中的所有方法
     for (let method of methods) {
       if(typeof StaticClass[method] === "function" && StaticClass[method].path) {
-          console.log(basePath + StaticClass[method].path)
-          // 添加权限校验
+
+          if (["post","put"].indexOf(StaticClass[method].method) >= 0){
+              router.use(
+                  basePath + StaticClass[method].path,
+                  bodyParser()
+              );
+              if(typeof StaticClass[method].bodySchema === "function"){
+                  router.use(
+                      basePath + StaticClass[method].path,
+                      async (ctx, next) => {
+                          ctx.params[StaticClass[method].bodyParamName] = new StaticClass[method].bodySchema(ctx.request.body);
+                          return next();
+                      }
+                  );
+              }
+          }
+
           router.use(
               basePath + StaticClass[method].path,
               validate(StaticClass[method])
           );
 
-          // 使用该类中的所有方法
-          router.all(StaticClass[method]);
+          router[StaticClass[method].method](StaticClass[method]);
       }
     }
   };
