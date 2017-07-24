@@ -63,7 +63,8 @@ export function wrappingKoaRouter(
 
     // 遍历该类中的所有方法
     for (let method of methods) {
-      if(typeof method === "function" && method.path) {
+      if(typeof StaticClass[method] === "function" && StaticClass[method].path) {
+          console.log(basePath + StaticClass[method].path)
           // 添加权限校验
           router.use(
               basePath + StaticClass[method].path,
