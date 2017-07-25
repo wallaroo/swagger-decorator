@@ -7,6 +7,7 @@
   "scripts": {
     "start": "./node_modules/.bin/nodemon --exec 'babel-node' './demo/app.js' --watch './src' --watch './demo'",
     "prepublish": "npm run build",
+    "install": "npm run build",
     "build": "rm -rf dist && node_modules/babel-cli/bin/babel.js src --out-dir dist",
     "test": "jest"
   },
