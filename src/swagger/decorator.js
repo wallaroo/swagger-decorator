@@ -62,12 +62,14 @@ export function pathParameter({
                                   name,
                                   description,
                                   type,
-                                  defaultValue
+                                  defaultValue,
+                                  required=true
                               }: {
     name: string,
     description: string,
     type: string,
-    defaultValue: any
+    defaultValue: any,
+    required: boolean
 }) {
     return function (target, key, descriptor) {
         let apiKey = `${target.name}-${key}`;
@@ -82,7 +84,7 @@ export function pathParameter({
             description,
             type,
             in: "path",
-            required: true,
+            required,
             default: defaultValue
         });
 

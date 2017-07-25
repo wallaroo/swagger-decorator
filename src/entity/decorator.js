@@ -43,7 +43,8 @@ export function entityProperty({
   pattern = undefined,
 
   // 进行数据库连接需要的参数
-  primaryKey = false
+  primaryKey = false,
+  example = undefined
 }) {
   return function(target, key, descriptor) {
     let entityUUID = generateEntityUUID(target, key, descriptor);
@@ -86,6 +87,7 @@ export function entityProperty({
     valueObject.pattern = pattern;
     valueObject.defaultValue = defaultValue;
     valueObject.primaryKey = primaryKey;
+    valueObject.example = example;
 
     // 这里需要设置下 writeable 为 true
     descriptor.writable = true;
