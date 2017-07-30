@@ -3,6 +3,7 @@
   "version": "0.0.22",
   "description": "Decorator for Koa2 and koa-router, Auto-Generate Swagger Docs",
   "main": "dist/index.js",
+  "jsnext:main":"src/index.js",
   "browser": "dist/index.browser.js",
   "scripts": {
     "start": "./node_modules/.bin/nodemon --exec 'babel-node' './demo/app.js' --watch './src' --watch './demo'",
@@ -12,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wxyyxc1992/swagger-docorator"
+    "url": "https://github.com/wallaroo/swagger-docorator"
   },
   "keywords": [
     "NodeJS",

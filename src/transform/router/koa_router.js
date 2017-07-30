@@ -73,7 +73,7 @@ export function wrappingKoaRouter(
                   router.use(
                       basePath + StaticClass[method].path,
                       async (ctx, next) => {
-                          ctx.params[StaticClass[method].bodyParamName] = new StaticClass[method].bodySchema(ctx.request.body);
+                          ctx.params[StaticClass[method].bodyParamName] = new (StaticClass[method].bodySchema)(ctx.request.body);
                           return next();
                       }
                   );
