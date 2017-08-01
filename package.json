@@ -6,7 +6,7 @@
   "jsnext:main":"src/index.js",
   "browser": "dist/index.browser.js",
   "scripts": {
-    "start": "./node_modules/.bin/nodemon --exec 'babel-node' './demo/app.js' --watch './src' --watch './demo'",
+    "start": "nodemon --exec 'babel-node' './demo/app.js' --watch './src' --watch './demo'",
     "prepublish": "npm run build",
     "build": "rm -rf dist && babel src -d dist",
     "test": "jest"
