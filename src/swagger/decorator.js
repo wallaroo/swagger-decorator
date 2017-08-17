@@ -12,9 +12,7 @@ export function apiRequestMapping(method: string, path: string) {
     return function (target, key, descriptor) {
         let apiKey = `${target.name}-${key}`;
 
-        // 设置请求方法
         descriptor.value.method = method;
-        // 设置请求路径
         descriptor.value.path = path;
 
         _initializeInnerAPIObject(target, key, descriptor);
@@ -221,7 +219,6 @@ export function apiResponse(statusCode: number,
  */
 function _initializeInnerAPIObject(target, key, descriptor) {
     let apiKey = `${target.name}-${key}`;
-
     if (!innerAPIObject[apiKey]) {
         innerAPIObject[apiKey] = {};
         innerAPIObject[apiKey].instance = {
