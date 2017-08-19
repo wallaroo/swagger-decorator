@@ -1,13 +1,30 @@
 {
-  "presets": [
-    "es2015",
-    "stage-3",
-    "flow",
-    "jest"
-  ],
-  "plugins": [
-    "transform-runtime",
-    "transform-decorators-legacy",
-    "transform-class-properties"
-  ]
+  "env":{
+    "dist":{
+      "presets": [
+        "es2015",
+        "stage-3",
+        "flow",
+        "jest"
+      ],
+      "plugins": [
+        "transform-runtime",
+        "transform-decorators-legacy",
+        "transform-class-properties"
+      ]
+    },
+    "es":{
+      "presets": [
+        ["es2015", {"modules":false}],
+        "stage-3",
+        "flow",
+        "jest"
+      ],
+      "plugins": [
+        "transform-runtime",
+        "transform-decorators-legacy",
+        "transform-class-properties"
+      ]
+    }
+  }
 }

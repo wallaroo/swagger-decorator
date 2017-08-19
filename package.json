@@ -4,11 +4,15 @@
   "description": "Decorator for Koa2 and koa-router, Auto-Generate Swagger Docs",
   "main": "dist/index.js",
   "jsnext:main":"src/index.js",
+  "module":"es/index.js",
   "browser": "dist/index.browser.js",
   "scripts": {
     "start": "nodemon --exec 'babel-node' './demo/app.js' --watch './src' --watch './demo'",
     "prepublish": "npm run build",
-    "build": "rm -rf dist && babel src -d dist",
+    "build": "npm-run-all -p build-dist build-es",
+    "build-dist": "BABEL_ENV=dist babel src -d dist",
+    "build-es": "BABEL_ENV=es babel src -d es",
+    "dev": "BABEL_ENV=es babel --watch src -d es",
     "test": "jest"
   },
   "repository": {
@@ -51,7 +55,8 @@
     "koa": "^2.2.0",
     "koa-body": "^2.3.0",
     "koa-router": "^7.2.1",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2"
   },
   "dependencies": {
     "babel-plugin-syntax-class-properties": "^6.13.0",
