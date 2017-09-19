@@ -39,12 +39,14 @@ export function entity(Class) {
 export function entityProperty({
                                    type = "string",
                                    format = "string",
+                                   enums = null,
                                    readOnly = false,
                                    description = "",
                                    required = false,
                                    defaultValue = undefined,
                                    pattern = undefined,
                                    primaryKey = false,
+                                   embed=false,
                                    example = undefined
                                }) {
     return function (target, key, descriptor) {
@@ -83,11 +85,13 @@ export function entityProperty({
         valueObject.defaultValue = defaultValue;
         valueObject.primaryKey = primaryKey;
         valueObject.example = example;
+        valueObject.enum = enums;
         valueObject.readOnly = readOnly;
-        if (!target.constructor.attrTypes){
-            target.constructor.attrTypes = {}
+        valueObject.embed = embed;
+        if (!target.constructor.hasOwnProperty("_attrTypes")){
+            target.constructor._attrTypes = {}
         }
-        target.constructor.attrTypes[key] = valueObject;
+        target.constructor._attrTypes[key] = valueObject;
         descriptor.writable = true;
 
         return descriptor;

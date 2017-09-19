@@ -8,7 +8,6 @@ import { innerEntityObject } from "../internal/singleton";
  * @private
  */
 export function buildDefinitions(Class: any) {
-  // 为了避免部分情况下传入的是 Class 数组，因此首先进行递归处理
   while (Array.isArray(Class)) {
     Class = Class[0];
   }

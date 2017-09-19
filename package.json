@@ -1,5 +1,5 @@
 {
-  "name": "swagger-decorator",
+  "name": "@m-idea/swagger-decorator",
   "version": "0.0.22",
   "description": "Decorator for Koa2 and koa-router, Auto-Generate Swagger Docs",
   "main": "dist/index.js",
